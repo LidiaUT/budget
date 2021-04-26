@@ -4,14 +4,14 @@
         <span class="card-title">Домашняя бухгалтерия</span>
         <div class="input-field">
           <label for="email">Email <span class="required">*</span></label>
-          <input id="email" type="text" autocomplete="on" v-model.trim="email">
+          <input id="email" type="text" v-model.trim="email">
           <small class="helper-text invalid" v-for="(error, index) of v$.email.$errors" :key="index">
           {{error.$message}}
           </small>
         </div>
         <div class="input-field">
           <label for="password">Password <span class="required">*</span></label>
-          <input id="password" type="password" autocomplete="off" v-model.trim="password">
+          <input id="password" type="password" v-model.trim="password">
           <small class="helper-text invalid" v-for="(error, index) of v$.password.$errors" :key="index">
           {{'teie viga on: ' + error.$message}}
         </small>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-// import messages from '@/utils/messages'
+import messages from '@/utils/messages'
 import { email, required, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 
@@ -56,31 +56,30 @@ export default {
       password: { required, minLength: minLength(6) }
     }
   },
-  /* mounted () {
+  mounted () {
     if (messages[this.$route.query.message]) { // esli na konce URL login stranici budet message=logout, to pojavitsja; messages importirovali iz nami ze sozdannogo faila messages.js
       this.$message(messages[this.$route.query.message])
     }
-  }, */
+  },
   methods: {
     async onSubmit () {
       this.v$.$touch() // validacija do alert'a na vvodimije dannije
       if (this.v$.$error) return
-      // alert('Form is valid for ' + this.email)
+      alert('Form is valid')
       const formData = {
         email: this.email,
         password: this.password
       }
       try {
         await this.$store.dispatch('login', formData)
-        this.$router.push('/history') // esli mi sdelajem login, to popadajem na History stranicu
-        console.log(formData) // na console vidno s kakim login/pwd zawli v sistemy
+        // console.log(formData)
+        this.$router.push('/history') // esli mi sdelajem login, to popadajem na Home stranicu
       } catch (error) {
+        // alert('login error: ' + e.message)
         const errorCode = error.code
         const errorMessage = error.message
         if (errorCode === 'auth/wrong-password') {
           alert('Sisestatud parool on vale')
-        } else if (errorCode === 'auth/user-not-found') {
-          alert('Seda kasutajat ei ole süsteemis')
         } else {
           alert(errorMessage)
         }

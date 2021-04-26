@@ -1,13 +1,11 @@
 <template>
   <div id="app">
     <component :is="layout">
-       <router-view/>
     </component>
   </div>
 </template>
 
 <script>
-// import { defineComponent } from '@vue/composition-api'
 import EmptyLayout from '@/layouts/EmptyLayout'
 import MainLayout from '@/layouts/MainLayout'
 
